@@ -1,0 +1,1 @@
+const String OpenWeatherApiKey = "497605f4f537fa7e2b41dc97a956141a";
