@@ -1,11 +1,11 @@
-
-
 class WeatherModel{
   final double currentTemp;
   final String currentSky;
   final int currentPressure;
   final double currentWindSpeed;
   final int currentHumidity;
+  final DateTime currentTime;
+  final List<WeatherModel> hourlyData;
 
   //<editor-fold desc="Data Methods">
   const WeatherModel({
@@ -14,6 +14,8 @@ class WeatherModel{
     required this.currentPressure,
     required this.currentWindSpeed,
     required this.currentHumidity,
+    required this.currentTime,
+    required this.hourlyData
   });
 
   @override
@@ -43,6 +45,7 @@ class WeatherModel{
         ' currentPressure: $currentPressure,' +
         ' currentWindSpeed: $currentWindSpeed,' +
         ' currentHumidity: $currentHumidity,' +
+        ' currentHourlyData: $hourlyData,' +
         '}';
   }
 
@@ -51,6 +54,7 @@ class WeatherModel{
     String? currentSky,
     int? currentPressure,
     double? currentWindSpeed,
+    DateTime? currentTime,
     int? currentHumidity,
   }) {
     return WeatherModel(
@@ -59,6 +63,8 @@ class WeatherModel{
       currentPressure: currentPressure ?? this.currentPressure,
       currentWindSpeed: currentWindSpeed ?? this.currentWindSpeed,
       currentHumidity: currentHumidity ?? this.currentHumidity,
+      hourlyData: [],
+      currentTime: currentTime ?? this.currentTime,
     );
   }
 
@@ -75,12 +81,24 @@ class WeatherModel{
   factory WeatherModel.fromMap(Map<String, dynamic> map) {
     final currentWeatherData = map['list'][0];
 
+    final hourlyList = (map['list'] as List)
+        .map((item) => WeatherModel(
+      currentTemp: item['main']['temp'].toDouble(),
+      currentSky: item['weather'][0]['main'],
+      currentPressure: item['main']['pressure'],
+      currentWindSpeed: item['wind']['speed'].toDouble(),
+      currentHumidity: item['main']['humidity'],
+      currentTime: item['dt_txt'],
+      hourlyData: const [],
+    )).toList();
+
     return WeatherModel(
       currentTemp: currentWeatherData['main']['temp'],
       currentSky: currentWeatherData['weather'][0]['main'],
       currentPressure: currentWeatherData['main']['pressure'],
       currentWindSpeed: currentWeatherData['wind']['speed'],
       currentHumidity: currentWeatherData['main']['humidity'],
+      hourlyData: hourlyList, currentTime: currentWeatherData['dt_txt'],
     );
   }
 

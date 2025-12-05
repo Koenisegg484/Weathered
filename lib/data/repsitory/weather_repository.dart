@@ -13,17 +13,9 @@ class WeatherRepository{
     try {
       final String weatherData = await weatherDataProvider.getCurrentWeather(cityName);
       final data = jsonDecode(weatherData);
-      // print(data["cod"]);
-      // print(data);
-      print(cityName);
-      // if(data["cod"] != 200){
-      //   throw Exception("An unexpected error occurred");
-      // }
-      WeatherModel.fromMap(data).toString();
       return WeatherModel.fromMap(data);
     } on Exception catch (e) {
       // TODO
-      print(e.toString());
       throw Exception("An unexpected error occurred");
     }
   }
